@@ -1,28 +1,20 @@
 package preprocessing;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.io.FileReader;
 import java.io.BufferedReader;
 
 public class Custom_Tokenizer {
 	
-	private static String path = "tweet_list.txt";
-	
-	public static void main(String [] args) {
-		createVocabulary();
-	}
-	
-	
+	String path = "tweet_list.txt";
+
 	/**
 	 * Create word bank from sample text file.
 	 */
-	public static void createVocabulary() {
+	public void createVocabulary() {
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(path)))
 		{
-
 			String sCurrentLine;
 
 			while ((sCurrentLine = br.readLine()) != null) {
@@ -43,10 +35,10 @@ public class Custom_Tokenizer {
 	 * @param s
 	 * @return
 	 */
-	private static String removeURLFromString(String string) {
+	public String removeURLFromString(String string) {
 
-        string = string.replaceAll("https?://\\S+\\s?", "");
-        string = string.replaceAll("www.\\S+\\s?", "");
+        string = string.replaceAll("https?://\\S+\\s?", ""); //Removes URL that begin with http
+        string = string.replaceAll("www.\\S+\\s?", ""); //Removes URL that being with www
 		return string;
 	}
 	
@@ -56,8 +48,8 @@ public class Custom_Tokenizer {
 	 * @param string
 	 * @return
 	 */
-	private static String removeNonAlphabetFromString(String string) {
-		string = string.replaceAll("[^A-Za-z# ]", "");
+	public String removeNonAlphabetFromString(String string) {
+		string = string.replaceAll("[^A-Za-z# ]", ""); //Kept twitter hashtags... might be useful
 		return string;
 	}
 }
