@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 public class Stop_Word {
 	
 	String path = "stop_word_list.txt";
-	ArrayList<String> list = new ArrayList<String>(); 
+	ArrayList<String> stopWordList = new ArrayList<String>(); 
 	
 	public Stop_Word() {
 		initalizeStopWordList();
@@ -20,18 +20,24 @@ public class Stop_Word {
 			String sCurrentLine;
 
 			while ((sCurrentLine = br.readLine()) != null) {
-				list.add(sCurrentLine);
+				stopWordList.add(sCurrentLine);
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
 	}
+
+	public ArrayList<String> getStopWordList() {
+		return stopWordList;
+	}
 	
-	/**
-	 * Remove stop words from string.
-	 */
-	public String removeStopWordFromString(String string) {
-		return string;
+	public boolean isStopWord(String string) {
+		for (int i = 0; i < stopWordList.size(); i++) {
+			if (stopWordList.get(i).equals(string.toLowerCase())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

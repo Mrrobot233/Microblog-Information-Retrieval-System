@@ -1,13 +1,20 @@
 package preprocessing;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.BufferedReader;
 
 public class Custom_Tokenizer {
 	
 	String path = "tweet_list.txt";
-
+	Stop_Word stopWord;
+	ArrayList<String> listOfWord = new ArrayList<String>();
+	
+	public Custom_Tokenizer() {
+		stopWord = new Stop_Word(); //Initalize list of stop words.
+	}
+	
 	/**
 	 * Create word bank from sample text file.
 	 */
@@ -20,7 +27,14 @@ public class Custom_Tokenizer {
 			while ((sCurrentLine = br.readLine()) != null) {
 				sCurrentLine = removeURLFromString(sCurrentLine);
 				sCurrentLine = removeNonAlphabetFromString(sCurrentLine);
-				System.out.println(sCurrentLine);
+				
+				String[] wordList = sCurrentLine.split("\\s+");
+				
+				for (int i = 0; i < wordList.length; i++) {
+					if (!stopWord.isStopWord(wordList[i])){
+						listOfWord.add(wordList[i]);
+					}
+				}
 			}
 
 		} catch (IOException e) {
@@ -51,5 +65,14 @@ public class Custom_Tokenizer {
 	public String removeNonAlphabetFromString(String string) {
 		string = string.replaceAll("[^A-Za-z# ]", ""); //Kept twitter hashtags... might be useful
 		return string;
+	}
+	
+	/**
+	 * Get list of words that will be indexed.
+	 * 
+	 * @return
+	 */
+	public ArrayList<String> getListOfWord() {
+		return listOfWord;
 	}
 }
