@@ -19,10 +19,14 @@ public class Stop_Word {
 		{
 			String sCurrentLine;
 
-			while ((sCurrentLine = br.readLine()) != null) {
-				stopWordList.add(sCurrentLine);
-			}
-
+			try {
+				while ((sCurrentLine = br.readLine()) != null) {
+					stopWordList.add(sCurrentLine);
+				}
+			} finally {
+				br.close();
+		    }
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
