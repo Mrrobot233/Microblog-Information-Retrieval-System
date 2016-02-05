@@ -2,36 +2,38 @@ package indexing;
 
 import java.io.IOException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Map.Entry;
 
 public class Custom_Indexing {
 	private String filtered_tweet_list_path = "filtered_tweet_list.txt";
 	private HashMap<String, HashMap<Integer, Integer>> invertedIndex = new HashMap<String, HashMap<Integer, Integer>>();
 	private HashMap<Integer, Integer> documentOccurrences;
-	private int numberOfTokens;
+	private double[][] weightedMatrix;
+	private int totalNumberOfDocuments;
 	
 	public Custom_Indexing() {
 		invertedIndex = new HashMap<String, HashMap<Integer, Integer>>();
-		numberOfTokens = 0;
+		totalNumberOfDocuments = 0;
+		weightedMatrix = new double[0][0];
 	}
 	
 	/**
 	 * Loop through the filtered Tweets list and create an inverted index 
 	 */
 	public void createInvertedIndex() {
-		int documentNumber = 1; //each line is a document
 		String[] documentTokens;
 		
 		try (Scanner sc = new Scanner(new FileReader(filtered_tweet_list_path))) {
 			while(sc.hasNextLine()) {
 				documentTokens = sc.nextLine().split(" ");
+				totalNumberOfDocuments++;
 				
 				for (int i=0; i<documentTokens.length; i++) {
-					addTokenToInvertedIndex(documentTokens[i], documentNumber);
-					numberOfTokens++;
+					addTokenToInvertedIndex(documentTokens[i], totalNumberOfDocuments);
 				}
-				documentNumber++;
 			}
 			sc.close();
 			
@@ -64,6 +66,66 @@ public class Custom_Indexing {
 	}
 	
 	/**
+	 * Loop through the invertedIndex and create a matrix that 
+	 */
+	public void createWeightIndex() {
+		int tokenNumber = 0;
+		int maxF = findMaxFrequency();
+		weightedMatrix = new double[getTotalNumerOfDocuments()][invertedIndex.size()];
+		
+		for(Entry<String, HashMap<Integer, Integer>> tokens : invertedIndex.entrySet()) {
+			tokenNumber++;
+			for(Entry<Integer, Integer> documentFreq : tokens.getValue().entrySet()) {
+				if ((documentFreq.getKey()-1) < weightedMatrix.length) {
+					weightedMatrix[documentFreq.getKey()-1][tokenNumber] = calculateWeight(documentFreq.getValue(), maxF, tokens.getValue().size());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Calculate the term weight
+	 * 
+	 * @param freq: frequency of item in document
+	 * @param maxF: max frequency of any item in any document
+	 * @param dI: number of documents containing term i
+	 * @return
+	 */
+	private double calculateWeight(int freq, int maxF, int dI) {
+		return (freq / maxF) * getLogBase2(getTotalNumerOfDocuments()/dI);
+	}
+	
+	
+	/**
+	 * Get log base 2 of an item
+	 * 
+	 * @param x
+	 * @return
+	 */
+	private double getLogBase2(double x) {
+		return Math.log(x)/Math.log(2);
+	}
+	
+	/**
+	 * Find the max frequency of any token in any doc
+	 * 
+	 * @return
+	 */
+	public int findMaxFrequency() {
+		int max = 0;
+		
+		for(Entry<String, HashMap<Integer, Integer>> entry : invertedIndex.entrySet()) {
+			for(Entry<Integer, Integer> entry2 : entry.getValue().entrySet()) {
+				if (max < entry2.getValue()) {
+					max = entry2.getValue();
+				}
+			}
+		}
+		
+		return max;
+	}
+	
+	/**
 	 * Get the inverted index
 	 * 
 	 * @return
@@ -73,13 +135,33 @@ public class Custom_Indexing {
 	}
 	
 	/**
-	 * Get the number of occurrences for a 
+	 * Get the weighted matrix
+	 * 
+	 * @return
+	 */
+	public double[][] getWeightedMatrix() {
+		return weightedMatrix;
+	}
+	
+	/**
+	 * Get the weight of documentNum and tokenNum
+	 * 
+	 * @param documentNum
+	 * @param tokenNum
+	 * @return
+	 */
+	public double getWeightedValue(int documentNum, int tokenNum) {
+		return weightedMatrix[documentNum][tokenNum];
+	}
+	
+	/**
+	 * Get the number of occurrences for a token in a specific document
 	 * 
 	 * @param number
 	 * @return
 	 */
-	public int getNumberOfOccurencesofATokenInDocument(String token, int number) {
-		return this.invertedIndex.get(token).get(number);
+	public int getNumberOfOccurencesofATokenInDocument(String token, int document) {
+		return this.invertedIndex.get(token).get(document);
 	}
 	
 	/**
@@ -93,20 +175,20 @@ public class Custom_Indexing {
 	}
 	
 	/**
-	 * Get total number of tokens read from file
-	 * 
-	 * @return
-	 */
-	public int getNumberOfTokens() {
-		return this.numberOfTokens;
-	}
-	
-	/**
 	 * Get the total number of key value pairs in the inverted index
 	 * 
 	 * @return
 	 */
 	public int getNumberOfKeyValuePairs() {
 		return this.invertedIndex.size();
+	}
+	
+	/**
+	 * Get the total number of documents in the inverted index
+	 * 
+	 * @return
+	 */
+	public int getTotalNumerOfDocuments() {
+		return this.totalNumberOfDocuments;
 	}
 }
