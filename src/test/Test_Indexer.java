@@ -48,7 +48,7 @@ public class Test_Indexer {
 	private static void printWeights(HashMap<String, HashMap<Integer, Double>> invertedIndex) {
 		for(Entry<String, HashMap<Integer, Double>> tokens : invertedIndex.entrySet()) {
 			for(Entry<Integer, Double> documentWeight : tokens.getValue().entrySet()) {
-				System.out.println(tokens.getKey() + "x" + documentWeight.getKey() + " = " + documentWeight.getValue());
+				System.out.println(tokens.getKey() + " | " + documentWeight.getKey() + " = " + documentWeight.getValue());
 			}
 		}
 	}
