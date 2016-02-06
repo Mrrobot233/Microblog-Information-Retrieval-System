@@ -1,6 +1,5 @@
 package test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -15,12 +14,15 @@ public class Test_Indexer {
 	 */
 	public static void main(String[] args) {
 		Custom_Indexing customIndexer = new Custom_Indexing();
-		customIndexer.createInvertedIndex();
-		customIndexer.createWeightIndex();
 		
-//		HashMap<String, HashMap<Integer, Integer>> invertedIndex = customIndexer.getInvertedIndex();
-//		printInvertedIndex(invertedIndex);
-		printWeightMatrix(customIndexer.getWeightedMatrix());
+		long startTime = System.nanoTime();
+		customIndexer.createInvertedIndex();
+//		printInvertedIndex(invertedIndex); only use this between creating the inverted index and calculating the weights
+		customIndexer.calculateWeights();
+		long endTime = System.nanoTime();
+		System.out.println((endTime - startTime) / 1000000000.0);
+		
+//		printWeights(customIndexer.getInvertedIndex());
 	}
 	
 	/**
@@ -43,10 +45,10 @@ public class Test_Indexer {
 	 * 
 	 * @param weightMatrix
 	 */
-	private static void printWeightMatrix(double[][] weightMatrix) {
-		for (int doc=0; doc<weightMatrix.length; doc++) {
-			for(int token=0; token<weightMatrix[doc].length; token++) {
-				System.out.println("Weight: " + (doc+1) + "x" + (token+1) + " = " + weightMatrix[doc][token]);
+	private static void printWeights(HashMap<String, HashMap<Integer, Double>> invertedIndex) {
+		for(Entry<String, HashMap<Integer, Double>> tokens : invertedIndex.entrySet()) {
+			for(Entry<Integer, Double> documentWeight : tokens.getValue().entrySet()) {
+				System.out.println(tokens.getKey() + "x" + documentWeight.getKey() + " = " + documentWeight.getValue());
 			}
 		}
 	}
