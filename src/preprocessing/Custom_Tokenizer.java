@@ -2,6 +2,7 @@ package preprocessing;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedReader;
@@ -9,16 +10,46 @@ import java.io.BufferedWriter;
 
 public class Custom_Tokenizer {
 	
-	String filtered_tweet_list_path = "filtered_tweet_list.txt"; //Document containing filtered tweets.
-	String non_filtered_tweet_list_path = "non_filtered_tweet_list.txt"; //Document containing non-filtered tweets.
-	Stop_Word stopWord;
+	private String filtered_tweet_list_path = "filtered_tweet_list.txt"; //Document containing filtered tweets.
+	private String non_filtered_tweet_list_path = "non_filtered_tweet_list.txt"; //Document containing non-filtered tweets.
+	private Stop_Word stopWord;
 
 	//List of filtered tweets without stop words, numbers, urls and punctuation.
-	ArrayList<String> listOfFilteredTweet = new ArrayList<String>(); 
-	
+	private ArrayList<String> listOfFilteredTweet = new ArrayList<String>(); 
+	private HashMap<Integer, String> listOfTweetId = new HashMap<Integer, String>();
 	
 	public Custom_Tokenizer() {
 		stopWord = new Stop_Word(); //Initalize list of stop words.
+	}
+	
+	/**
+	 * Creates a list of tweetIds that will be used for displaying results when matching tweets to queries.
+	 * 
+	 * ArrayList index implies document number.
+	 */
+	public void createTweetIdReference() {
+		try (BufferedReader br = new BufferedReader(new FileReader(non_filtered_tweet_list_path))) 
+		{
+			int documentCount = 0;
+			listOfTweetId.clear();
+			String sCurrentLine;
+			
+			System.out.println("Creating list of tweet IDs.");
+			
+			try {
+				while ((sCurrentLine = br.readLine()) != null) {
+					documentCount++;
+					listOfTweetId.put(documentCount, sCurrentLine.split("	")[0]);
+				}
+			} finally {
+				br.close();
+		    }
+			
+			System.out.println("Finished creatomg list of tweet IDs.");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -49,7 +80,6 @@ public class Custom_Tokenizer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	/**
@@ -145,5 +175,9 @@ public class Custom_Tokenizer {
 	 */
 	public ArrayList<String> getListOfFilteredTweet() {
 		return listOfFilteredTweet;
+	}
+	
+	public HashMap<Integer, String> getListOfTweetId() {
+		return listOfTweetId;
 	}
 }

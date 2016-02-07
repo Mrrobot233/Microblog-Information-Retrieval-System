@@ -17,12 +17,12 @@ public class Test_Indexer {
 		
 		long startTime = System.nanoTime();
 		customIndexer.createInvertedIndex();
-//		printInvertedIndex(invertedIndex); only use this between creating the inverted index and calculating the weights
+		printInvertedIndex(customIndexer.getInvertedIndex()); //only use this between creating the inverted index and calculating the weights
 		customIndexer.calculateWeights();
 		long endTime = System.nanoTime();
 		System.out.println((endTime - startTime) / 1000000000.0);
 		
-//		printWeights(customIndexer.getInvertedIndex());
+		//printWeights(customIndexer.getInvertedIndex());
 	}
 	
 	/**
@@ -30,9 +30,9 @@ public class Test_Indexer {
 	 * 
 	 * @param invertedIndex
 	 */
-	private static void printInvertedIndex(HashMap<String, HashMap<Integer, Integer>> invertedIndex) {
+	private static void printInvertedIndex(HashMap<String, HashMap<Integer, Double>> invertedIndex) {
 		System.out.println("{");
-		for(Entry<String, HashMap<Integer, Integer>> entry : invertedIndex.entrySet()) {
+		for(Entry<String, HashMap<Integer, Double>> entry : invertedIndex.entrySet()) {
 		    System.out.print("  " + entry.getKey() + ": {");
 		    entry.getValue().forEach((k,v)->System.out.print(k + ": " + v + ", "));
 		    System.out.print("}\n");

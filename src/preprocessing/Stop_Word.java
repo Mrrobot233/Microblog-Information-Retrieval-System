@@ -7,8 +7,8 @@ import java.io.BufferedReader;
 
 public class Stop_Word {
 	
-	String path = "stop_word_list.txt";
-	ArrayList<String> stopWordList = new ArrayList<String>(); 
+	private String path = "stop_word_list.txt";
+	private ArrayList<String> stopWordList = new ArrayList<String>(); 
 	
 	public Stop_Word() {
 		initalizeStopWordList();
