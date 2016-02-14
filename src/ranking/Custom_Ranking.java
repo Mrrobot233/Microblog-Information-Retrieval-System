@@ -40,15 +40,15 @@ public class Custom_Ranking {
 		try (BufferedReader br = new BufferedReader(new FileReader(query_list_path))) 
 		{
 			String sCurrentLine;
+			int id = 0;
 			
 			System.out.println("Creating list of queries.");
 			Query tempQuery = new Query();
 			try {
 				while ((sCurrentLine = br.readLine()) != null) {
-					
 					if (sCurrentLine.split(" ")[0].equals("<num>")) 
 					{
-						tempQuery.setId(sCurrentLine.split(" ")[2]);
+						tempQuery.setId(Integer.toString(++id));
 					} 
 					else if (sCurrentLine.split(" ")[0].equals("<title>")) 
 					{
@@ -104,7 +104,7 @@ public class Custom_Ranking {
 			evaluationResult.setCosineSimilarityValue(cosineSimilarity);
 			evaluationResult.setDocNum(customTokenizer.getListOfTweetId().get(documentNumber + 1));
 			evaluationResult.setTopicId(query.getId());
-			evaluationResult.setTag(query.getTitle());
+			evaluationResult.setTag("myRun");
 			
 			evaluationResultList.add(evaluationResult);
 		}

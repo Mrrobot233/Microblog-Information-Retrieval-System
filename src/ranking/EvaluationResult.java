@@ -3,7 +3,7 @@ package ranking;
 public class EvaluationResult implements Comparable<EvaluationResult>{
 	
 	private String topicId;
-	private String q0 = "q0";
+	private String q0 = "Q0";
 	private String docNum = "";
 	private double cosineSimilarityValue = 0.000;
 	private String tag;
