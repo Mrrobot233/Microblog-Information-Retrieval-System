@@ -100,13 +100,14 @@ public class Custom_Ranking {
 					documentNumber, 
 					customTokenizer.getListOfFilteredTweet().get(documentNumber));
 			
-			EvaluationResult evaluationResult = new EvaluationResult();
-			evaluationResult.setCosineSimilarityValue(cosineSimilarity);
-			evaluationResult.setDocNum(customTokenizer.getListOfTweetId().get(documentNumber + 1));
-			evaluationResult.setTopicId(query.getId());
-			evaluationResult.setTag("myRun");
-			
-			evaluationResultList.add(evaluationResult);
+			if (cosineSimilarity > 0) {
+				EvaluationResult evaluationResult = new EvaluationResult();
+				evaluationResult.setCosineSimilarityValue(cosineSimilarity);
+				evaluationResult.setDocNum(customTokenizer.getListOfTweetId().get(documentNumber + 1));
+				evaluationResult.setTopicId(query.getId());
+				evaluationResult.setTag("myRun");
+				evaluationResultList.add(evaluationResult);
+			}
 		}
 
 		Collections.sort(evaluationResultList);
