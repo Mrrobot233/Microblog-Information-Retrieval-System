@@ -16,6 +16,7 @@ import java.util.Set;
 
 import indexing.Custom_Indexing;
 import preprocessing.Custom_Tokenizer;
+import preprocessing.Stop_Word;
 
 public class Custom_Ranking {
 	
@@ -24,6 +25,7 @@ public class Custom_Ranking {
 	private Custom_Indexing customIndexing;
 	private ArrayList<Query> queryList = new ArrayList<Query>();
 	private Custom_Tokenizer customTokenizer;
+	private Stop_Word stopWord = new Stop_Word();
 	
 	public Custom_Ranking() {
 		
@@ -90,6 +92,17 @@ public class Custom_Ranking {
 		Set<Integer> listOfRelevantDocument;
 		Query query = queryList.get(queryNumber);
 		String title = query.getTitle().toLowerCase();;
+		title = removeNonAlphabetFromString(title);
+
+		String[] wordList = title.split("\\s+");
+		
+		for (int i = 0; i < wordList.length; i++) {
+			if (!stopWord.isStopWord(wordList[i])){
+				title += wordList[i] + " ";
+			}
+		}
+		title = title.trim();
+		
 		double cosineSimilarity;
 		String[] listOfQueryWord = title.split(" ");
 		listOfRelevantDocument = getListOfRelevantDocument(listOfQueryWord);
@@ -197,5 +210,16 @@ public class Custom_Ranking {
 			}
 		}
 		return listOfRelevantDocument;
+	}
+	
+	/**
+	 * Remove non alphabets from string.
+	 * 
+	 * @param string
+	 * @return
+	 */
+	private String removeNonAlphabetFromString(String string) {
+		string = string.replaceAll("[^A-Za-z ]", ""); //Kept twitter hashtags... might be useful
+		return string;
 	}
 }
