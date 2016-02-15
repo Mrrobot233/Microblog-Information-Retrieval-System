@@ -103,7 +103,7 @@ public class Custom_Tokenizer {
 					String[] wordList = sCurrentLine.split("\\s+");
 					
 					for (int i = 0; i < wordList.length; i++) {
-						if (!stopWord.isStopWord(wordList[i]) && wordList[i].length() > 2){
+						if (!stopWord.isStopWord(wordList[i])){
 							filteredTweet += wordList[i] + " ";
 						}
 					}
