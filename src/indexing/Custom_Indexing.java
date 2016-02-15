@@ -28,11 +28,11 @@ public class Custom_Indexing {
 		try (Scanner sc = new Scanner(new FileReader(filtered_tweet_list_path))) {
 			while(sc.hasNextLine()) {
 				documentTokens = sc.nextLine().split(" ");
-				totalNumberOfDocuments++;
 				
 				for (int i=0; i<documentTokens.length; i++) {
 					addTokenToInvertedIndex(documentTokens[i], totalNumberOfDocuments);
 				}
+				totalNumberOfDocuments++;
 			}
 			sc.close();
 			

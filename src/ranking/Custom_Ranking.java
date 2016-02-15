@@ -2,7 +2,6 @@ package ranking;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -95,12 +94,6 @@ public class Custom_Ranking {
 		title = removeNonAlphabetFromString(title);
 
 		String[] wordList = title.split("\\s+");
-		
-		for (int i = 0; i < wordList.length; i++) {
-			if (!stopWord.isStopWord(wordList[i])){
-				title += wordList[i] + " ";
-			}
-		}
 		title = title.trim();
 		
 		double cosineSimilarity;
@@ -173,7 +166,7 @@ public class Custom_Ranking {
 		String[] listOfDocumentWord = document.split(" ");
 		
 		for (String word : listOfDocumentWord) {
-			documentMap.put(word, customIndexing.getInvertedIndex().get(word).get(documentNumber+1));
+			documentMap.put(word, customIndexing.getInvertedIndex().get(word).get(documentNumber));
 		}
 		
 		for (String word: listOfQueryWord) {
