@@ -219,6 +219,7 @@ public class Custom_Ranking {
 	 * @return
 	 */
 	private String removeNonAlphabetFromString(String string) {
+		string = string.replaceAll("-", " ");
 		string = string.replaceAll("[^A-Za-z ]", ""); //Kept twitter hashtags... might be useful
 		return string;
 	}
