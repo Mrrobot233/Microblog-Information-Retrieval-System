@@ -141,7 +141,7 @@ public class Custom_Tokenizer {
 	 * @return
 	 */
 	public String removeNonAlphabetFromString(String string) {
-		string = string.replaceAll("[^A-Za-z# ]", ""); //Kept twitter hashtags... might be useful
+		string = string.replaceAll("[^A-Za-z ]", ""); //Kept twitter hashtags... might be useful
 		return string;
 	}
 
