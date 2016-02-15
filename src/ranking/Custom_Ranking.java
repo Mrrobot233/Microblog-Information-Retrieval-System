@@ -91,7 +91,7 @@ public class Custom_Ranking {
 		ArrayList<EvaluationResult> evaluationResultList = new ArrayList<EvaluationResult>();
 		Set<Integer> listOfRelevantDocument;
 		Query query = queryList.get(queryNumber);
-		String title = query.getTitle().toLowerCase();;
+		String title = query.getTitle().toLowerCase();
 		title = removeNonAlphabetFromString(title);
 
 		String[] wordList = title.split("\\s+");
@@ -105,11 +105,13 @@ public class Custom_Ranking {
 		
 		double cosineSimilarity;
 		String[] listOfQueryWord = title.split(" ");
+		HashMap<String, Double> queryWordWeightList = getQueryWordWeight(listOfQueryWord);
 		listOfRelevantDocument = getListOfRelevantDocument(listOfQueryWord);
 
 		for (int documentNumber : listOfRelevantDocument) {
 			cosineSimilarity = getCosineSimilarity(
-					listOfQueryWord, 
+					listOfQueryWord,
+					queryWordWeightList,
 					documentNumber, 
 					customTokenizer.getListOfFilteredTweet().get(documentNumber));
 			
@@ -133,6 +135,7 @@ public class Custom_Ranking {
 		try {
 
 			System.out.println("Printing Results for Query");
+			System.out.println("Result size: " + evaluationResultList.size());
 			
 			BufferedWriter out = new BufferedWriter(new FileWriter(evaluation_result_path, true));
 			DecimalFormat df = new DecimalFormat("0.000"); 
@@ -162,7 +165,7 @@ public class Custom_Ranking {
 	    }
 	}
 	
-	private double getCosineSimilarity(String[] listOfQueryWord, int documentNumber, String document) {
+	private double getCosineSimilarity(String[] listOfQueryWord, HashMap<String, Double> queryWordWeightList, int documentNumber, String document) {
 		
 		HashMap<String, Double> documentMap = new HashMap<String, Double>();
 		HashMap<String, Double> queryMap = new HashMap<String, Double>();
@@ -175,10 +178,22 @@ public class Custom_Ranking {
 		
 		for (String word: listOfQueryWord) {
 			if (queryMap.containsKey(word)) {
-				queryMap.put(word, queryMap.get(word) + 1);
+				queryMap.put(word, queryMap.get(word) + 1.0);
 			} else {
 				queryMap.put(word, 1.0);
 			}
+		}
+		
+		double maxQueryFrequency = 0;
+		
+		for (String word: queryMap.keySet()) {
+			if (queryMap.get(word) > maxQueryFrequency) {
+				maxQueryFrequency = queryMap.get(word);
+			}
+		}
+
+		for (String word: queryMap.keySet()) {
+			queryMap.put(word, (queryMap.get(word)/maxQueryFrequency)*queryWordWeightList.get(word));
 		}
 		
 		double dotProductValue = 0.0;
@@ -186,7 +201,6 @@ public class Custom_Ranking {
 		double querySquaredSum = 0.0;
 		
 		for (String word : listOfDocumentWord) {
-			System.out.println(documentMap.get(word));
 			double wordCount = (double) documentMap.get(word);
 			documentSquaredSum += (wordCount * wordCount);
 			
@@ -196,9 +210,10 @@ public class Custom_Ranking {
 		}
 		
 		for (String word: queryMap.keySet()) {
-			double wordCount = (double) queryMap.get(word);
-			querySquaredSum += wordCount * wordCount;
+			double wordWeight = (double) queryMap.get(word);
+			querySquaredSum += wordWeight * wordWeight;
 		}
+		
 		return dotProductValue / (Math.sqrt(documentSquaredSum * querySquaredSum));
 	}
 	
@@ -210,6 +225,24 @@ public class Custom_Ranking {
 			}
 		}
 		return listOfRelevantDocument;
+	}
+	
+	private HashMap<String, Double> getQueryWordWeight(String[] listOfQueryWord) {
+		HashMap<String, Double> queryWordWeight = new HashMap<String, Double>();
+		for (int i = 0; i < listOfQueryWord.length; i++) {
+			if (customIndexing.getInvertedIndex().containsKey(listOfQueryWord[i])) {
+				
+				double totalOccurrence = 0;
+				for (double val : customIndexing.getInvertedIndex().get(listOfQueryWord[i]).values()) {
+					totalOccurrence += val;
+				}
+				
+				queryWordWeight.put(listOfQueryWord[i], (double) (Math.log(45899/totalOccurrence)));
+			} else {
+				queryWordWeight.put(listOfQueryWord[i], 0.0);
+			}
+		}
+		return queryWordWeight;
 	}
 	
 	/**
