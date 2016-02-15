@@ -97,6 +97,7 @@ public class Custom_Tokenizer {
 				while ((sCurrentLine = br.readLine()) != null) {
 					sCurrentLine = removeURLFromString(sCurrentLine);
 					sCurrentLine = removeNonAlphabetFromString(sCurrentLine);
+					sCurrentLine = sCurrentLine.toLowerCase();
 					
 					String filteredTweet = "";
 					String[] wordList = sCurrentLine.split("\\s+");

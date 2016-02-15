@@ -89,7 +89,7 @@ public class Custom_Ranking {
 		ArrayList<EvaluationResult> evaluationResultList = new ArrayList<EvaluationResult>();
 		Set<Integer> listOfRelevantDocument;
 		Query query = queryList.get(queryNumber);
-		String title = query.getTitle();
+		String title = query.getTitle().toLowerCase();;
 		double cosineSimilarity;
 		String[] listOfQueryWord = title.split(" ");
 		listOfRelevantDocument = getListOfRelevantDocument(listOfQueryWord);
