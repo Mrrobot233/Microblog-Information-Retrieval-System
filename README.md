@@ -18,7 +18,7 @@ For task division we simply divided out each step and assigned each other to the
 ## Program Description
 This program is an information retrieval system that is implemented for a collection of Twitter messages.
 The system expects a list of tweets as input. The system then parses this list of tweets and filters it,
-removing all the stop words, numbers, links, and hashtags.
+removing all the stop words, numbers, links, and punctuations.
 
 Once the tweets have been filtered, they are put into the filtered_tweets_list.txt so that they can be easily read later.
 Each tweet is displayed on its own line which in turn represents a single document. After filtering the tweets, the program 
@@ -33,7 +33,8 @@ is the number of occurences for the term (or word) in that document. The below i
 
 Once the inverted index is created, the program then calculates the weights for each token. Since the number of document occurrences for each token is no longer needed, the program replaces the value of the embedded hashmap with the calculated weight for that particular token and document. To calculate this, we use the following formula: W_ij = tf_ij x idf_i.
 
-## finish talking about ranking part of the program
+Once indexing is completed, the program will then loop through each query from query.txt.  With each query, the program will find the list of relevant documents.  This is done by parsing the query into individual words and using each word to find relevant documents using the invereted index since the inverted index has a reference to the document number.  From the subset of documents we retreive, we apply the cosine method to calculate the similarities between each relevant document and the query.  An important thing to note is that we use the weights for each document tokens from the inverted index as well as calculate the weights for each query word before we calculate the cosine value.  The cosine values are stored into a list which ends up getting sorted to determine their corresponding rank.
+
 
 ## How to run the program
 To run the program, simply take the Java project and import it direclty into Eclipse. You will need to include the list of 
@@ -92,9 +93,17 @@ Algorithms for Indexing
 - calculateWeight(double freq, double maxF, int dI): Actually calculate the term/document weight.
 
 Algorithrms for Ranking
+- getCosineSimilarity(String[] listOfQueryWord, HashMap<String, Double> queryWordWeightList, int documentNumber, String document): Gets similiarity value between query and document.
+- getListOfRelevantDocument(String[] listOfQueryWord): Gathers a list of relevent document that contain at least one word inside the query.
+- getQueryWordWeight(String[] listOfQueryWord): Calculates the weight of each word inside the query.
+- buildQueryList(): Creates a list of query objects from query.txt.
 
 ### Optimizations
-bla
+- Removal of stop words, punctuation and numbers from our query (This improved our results roughly by 0.01~)
+- Removing links from our documents (Very small improvement in our results, roughly by 0.005~)
+- Adding weights to each query word (This improved our reuslts roughly by 0.05~)
+- Instead of replacing dashes with empty string, we replaced dashes with spaces which often created 2 separate words (This improved our results roughly by 0.05~)
+- Included size 1 words inside list of stop words (Very small improvement of our results by roughly 0.005~)
 
 ### Vocabulary
 Our vocabulary size is: 65920.
@@ -124,7 +133,7 @@ shrinks, schubart, bruceleroy, cabbies, colouring, offc, glaad, offe.
 - 30317913206431744
 - 30260724248870912
 
-### Query 10
+### Query 25
 - 31499543946207232
 - 31076061462659072
 - 29220224423174145
@@ -137,7 +146,7 @@ shrinks, schubart, bruceleroy, cabbies, colouring, offc, glaad, offe.
 - 30237111005220864
 
 ## Discussion of Results
-Add discussion here.
+Since there are over 20 sample results above, I will compare the best result for query 1 against query 1.  Query 1 text was "BBC World Service staff cuts" and the best ranked document contained the following text, "[BBC News] Major cuts to BBC World Service: BBC World Service is to close five of its language services, with th... http://bbc.in/e2vlpX".  After filtering the results of our best ranked document, we get the following text: "bbc news major cuts bbc service bbc service close language services".  After filtering query 1, we get the following text: "bbc service staff cuts". If we compare the text of these 2 results, every single word in the query is contained inside the best ranked document.  Furthermore, some of these words appear more than once and 7/11 of the words inside the document matches the query.  The reason these 2 string of text became so similar is due to link and stop word removal.  If we compare the original text, 9/21 of the words inside the document match the query which is quite a big difference percent wise compared to 7/11.  Furthermore, since the results are all weighted, this further increased similiarity value between query 1 and the best ranked document.
 
 - num_q          	all	49
 - num_ret        	all	35994
