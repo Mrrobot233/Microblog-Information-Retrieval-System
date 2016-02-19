@@ -98,6 +98,7 @@ bla
 
 ### Vocabulary
 Our vocabulary size is: 65920.
+
 100 token sample: 
 undermining, cheneybribes, spilling, abrupt, salary, childs, artieka, bbctbq, clothingshoeshandbagsmpdvds, avant, blasts, 
 liferichmond, remax, flfw, wingsuit, canqueer, timah, chiles, unitedkingdom, cribsies, ballestas, jayrosennyu, nonviolent, 
@@ -138,35 +139,35 @@ shrinks, schubart, bruceleroy, cabbies, colouring, offc, glaad, offe.
 ## Discussion of Results
 Add discussion here.
 
-num_q          	all	49
-num_ret        	all	35994
-num_rel        	all	2640
-num_rel_ret    	all	2141
-map            	all	0.1532
-gm_ap          	all	0.0940
-R-prec         	all	0.1748
-bpref          	all	0.1371
-recip_rank     	all	0.4012
-ircl_prn.0.00  	all	0.4581
-ircl_prn.0.10  	all	0.2870
-ircl_prn.0.20  	all	0.2383
-ircl_prn.0.30  	all	0.2071
-ircl_prn.0.40  	all	0.1946
-ircl_prn.0.50  	all	0.1765
-ircl_prn.0.60  	all	0.1312
-ircl_prn.0.70  	all	0.1028
-ircl_prn.0.80  	all	0.0726
-ircl_prn.0.90  	all	0.0359
-ircl_prn.1.00  	all	0.0048
-P5             	all	0.2490
-P10            	all	0.2265
-P15            	all	0.2068
-P20            	all	0.1939
-P30            	all	0.1748
-P100           	all	0.1314
-P200           	all	0.1116
-P500           	all	0.0747
-P1000          	all	0.0437
+- num_q          	all	49
+- num_ret        	all	35994
+- num_rel        	all	2640
+- num_rel_ret    	all	2141
+- map            	all	0.1532
+- gm_ap          	all	0.0940
+- R-prec         	all	0.1748
+- bpref          	all	0.1371
+- recip_rank     	all	0.4012
+- ircl_prn.0.00  	all	0.4581
+- ircl_prn.0.10  	all	0.2870
+- ircl_prn.0.20  	all	0.2383
+- ircl_prn.0.30  	all	0.2071
+- ircl_prn.0.40  	all	0.1946
+- ircl_prn.0.50  	all	0.1765
+- ircl_prn.0.60  	all	0.1312
+- ircl_prn.0.70  	all	0.1028
+- ircl_prn.0.80  	all	0.0726
+- ircl_prn.0.90  	all	0.0359
+- ircl_prn.1.00  	all	0.0048
+- P5             	all	0.2490
+- P10            	all	0.2265
+- P15            	all	0.2068
+- P20            	all	0.1939
+- P30            	all	0.1748
+- P100           	all	0.1314
+- P200           	all	0.1116
+- P500           	all	0.0747
+- P1000          	all	0.0437
 
 
 
